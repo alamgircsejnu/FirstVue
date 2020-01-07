@@ -213,6 +213,16 @@
             }
         },
         created() {
+            Fire.$on('searching', () => {
+                let query = this.$parent.search;
+                axios.get('api/findUser?q='+query)
+                    .then(({data}) => {
+                        this.users = data;
+                    })
+                    .catch(() => {
+
+                    })
+            });
             this.loadUsers();
             Fire.$on('ReloadUsers', () => {
                 this.loadUsers();

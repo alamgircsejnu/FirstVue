@@ -2388,6 +2388,13 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this6 = this;
 
+    Fire.$on('searching', function () {
+      var query = _this6.$parent.search;
+      axios.get('api/findUser?q=' + query).then(function (_ref2) {
+        var data = _ref2.data;
+        _this6.users = data;
+      })["catch"](function () {});
+    });
     this.loadUsers();
     Fire.$on('ReloadUsers', function () {
       _this6.loadUsers();
@@ -79402,6 +79409,9 @@ var routes = [{
 }, {
   path: '/developer',
   component: __webpack_require__(/*! ./components/Developer.vue */ "./resources/js/components/Developer.vue")["default"]
+}, {
+  path: '*',
+  component: __webpack_require__(/*! ./components/NotFound.vue */ "./resources/js/components/NotFound.vue")["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
   mode: "history",
@@ -79432,7 +79442,17 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 
 var app = new Vue({
   el: '#app',
-  router: router
+  router: router,
+  data: function data() {
+    return {
+      search: ''
+    };
+  },
+  methods: {
+    searchIt: _.debounce(function () {
+      Fire.$emit('searching');
+    }, 500)
+  }
 });
 
 /***/ }),
